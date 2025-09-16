@@ -75,7 +75,13 @@ EXTRA_CLEAN = sql/
 
 CURV_big=@POSTGIS_MAJOR_VERSION@@POSTGIS_MINOR_VERSION@
 
-all: sql/$(EXTENSION)--$(EXTVERSION).sql sql/$(EXTENSION)--unpackaged--$(EXTVERSION).sql sql/$(EXTENSION)--ANY--$(EXTVERSION).sql
+# Explicit target for control files
+control-files: $(EXTENSION).control
+
+all: $(EXTENSION).control sql/$(EXTENSION)--$(EXTVERSION).sql sql/$(EXTENSION)--unpackaged--$(EXTVERSION).sql sql/$(EXTENSION)--ANY--$(EXTVERSION).sql
+
+# Ensure control file is built before install
+install: $(EXTENSION).control
 
 $(EXTENSION).control: $(EXTENSION).control.in Makefile
 	cat $< \
